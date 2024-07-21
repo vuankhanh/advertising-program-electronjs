@@ -1,20 +1,37 @@
-## Hướng dẫn cấu hình dịch vụ Advertising Program
+## Hướng Dẫn Cấu Hình Dịch Vụ Marketing4than
 
-### Khởi động dịch vụ cùng với hệ điều hành Ubuntu
+### Khởi Động Dịch Vụ Cùng Với Hệ Điều Hành Ubuntu
 
-Đảm bảo rằng dịch vụ Advertising Program được cài đặt và cấu hình để khởi động sau khi môi trường đồ họa đã sẵn sàng. Để làm điều này, sử dụng các chỉ thị sau trong file systemd service của bạn:
+Để đảm bảo rằng dịch vụ Marketing4than được cài đặt và cấu hình để tự động khởi động sau khi môi trường đồ họa đã sẵn sàng, hãy thực hiện các bước sau:
 
-[Unit]
-Description=My Advertising Program Service
-After=multi-user.target systemd-sysusers.service
-Requires=systemd-sysusers.service
+**1. Mở File Cấu Hình Dịch Vụ:**
 
-[Service]
-ExecStart=/home/your_username/Desktop/Advertising_Program-linux-x64/Advertising_Program
-Restart=always
-User=your_username
-Environment=DISPLAY=:0
-Environment=XAUTHORITY=/home/your_username/.Xauthority
+*Mở terminal và nhập lệnh sau để chỉnh sửa file cấu hình dịch vụ của Marketing4than*
 
-[Install]
-WantedBy=multi-user.target
+  ```bash
+  sudo nano /etc/systemd/system/marketing4than.service
+  ```
+**2. Thêm Nội Dung Vào File Cấu Hình:** 
+  ```
+  [Unit]
+  Description=My Marketing4than Service
+  After=multi-user.target systemd-sysusers.service
+  Requires=systemd-sysusers.service
+
+  [Service]
+  ExecStart=/home/your_username/Desktop/Marketing4than-linux-x64/Marketing4than
+  Restart=always
+  User=your_username
+  Environment=DISPLAY=:0
+  Environment=XAUTHORITY=/home/your_username/.Xauthority
+
+  [Install]
+  WantedBy=multi-user.target
+  ```
+  *Đảm bảo thay thế your_username bằng tên người dùng thực tế của bạn.*
+
+**3. Kích Hoạt Và Khởi Động Dịch Vụ:**
+  ```bash
+  sudo systemctl daemon-reload
+  sudo systemctl enable marketing4than.service
+  ```

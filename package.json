@@ -10,8 +10,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "build-linux": "electron-packager . Advertising_Program --platform=linux --arch=x64 --out=out/dev --overwrite",
-    "build-linux:prod": "cross-env NODE_ENV=production electron-packager . Advertising_Program --platform=linux --arch=x64 --out=out/prod --overwrite"
+    "build-linux": "electron-packager . Marketing4than --platform=linux --arch=x64 --icon=src/assets/icons/png/512x512.png --out=out --overwrite --ignore=out/"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",

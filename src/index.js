@@ -1,5 +1,6 @@
 const { app, BrowserWindow, globalShortcut } = require('electron');
 const path = require('node:path');
+const setupShortcuts = require('./helpers/shortcuts.js');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -11,22 +12,32 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    icon: path.join(__dirname, './assets/icons/png/512x512.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
     fullscreen: true,
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html'));
+  // // and load the index.html of the app.
+  // mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html'));
+
+  // Load a remote URL
+  mainWindow.loadURL('http://marketing.bep4than.online').catch((err) => {
+    console.error('Load URL is Error: ');
+    console.error(err);
+    mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html')).catch((err)=>{
+      console.error('Load File is Error: ');
+      console.error(err);
+      mainWindow.loadFile(path.join(__dirname, './index.html'));
+    });
+  })
 
   // Remove the menu bar
   mainWindow.setMenu(null);
 
-  // Open the DevTools.
-  if (process.env.NODE_ENV !== 'production') {
-    mainWindow.webContents.openDevTools();
-  }
+  //Check if the app is in development mode
+  console.log(process.env.NODE_ENV);
 
   return mainWindow;
 };
@@ -38,17 +49,7 @@ app.whenReady().then(() => {
   const mainWindow = createWindow();
 
   // Register global shortcuts
-  globalShortcut.register('F11', () => {
-    if (mainWindow.isFullScreen()) {
-      mainWindow.setFullScreen(false);
-    } else {
-      mainWindow.setFullScreen(true);
-    }
-  });
-
-  globalShortcut.register('Esc', () => {
-    mainWindow.minimize();
-  });
+  setupShortcuts(mainWindow);
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
