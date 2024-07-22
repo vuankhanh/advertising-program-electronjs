@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut } = require('electron');
+const { screen, app, BrowserWindow, globalShortcut } = require('electron');
 const path = require('node:path');
 const setupShortcuts = require('./helpers/shortcuts.js');
 
@@ -9,6 +9,9 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = () => {
   // Create the browser window.
+  const displays = screen.getAllDisplays();
+  const secondDisplay = displays[1] || displays[0];
+
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -17,8 +20,10 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
     },
     fullscreen: true,
+    x: secondDisplay.bounds.x, // X coordinate of the second display
+    y: secondDisplay.bounds.y, // Y coordinate of the second display
   });
-
+  
   // // and load the index.html of the app.
   // mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html'));
 
@@ -35,9 +40,6 @@ const createWindow = () => {
 
   // Remove the menu bar
   mainWindow.setMenu(null);
-
-  //Check if the app is in development mode
-  console.log(process.env.NODE_ENV);
 
   return mainWindow;
 };
