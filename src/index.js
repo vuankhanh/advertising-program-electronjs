@@ -27,16 +27,19 @@ const createWindow = () => {
   // // and load the index.html of the app.
   // mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html'));
 
-  // Load a remote URL
-  mainWindow.loadURL('http://marketing.bep4than.online').catch((err) => {
-    console.error('Load URL is Error: ');
-    console.error(err);
-    mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html')).catch((err)=>{
-      console.error('Load File is Error: ');
+  // Xóa cache trước khi tải URL
+  mainWindow.webContents.session.clearCache().then(() => {
+    // Load a remote URL
+    mainWindow.loadURL('http://marketing.bep4than.online').catch((err) => {
+      console.error('Load URL is Error: ');
       console.error(err);
-      mainWindow.loadFile(path.join(__dirname, './index.html'));
-    });
-  })
+      mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html')).catch((err)=>{
+        console.error('Load File is Error: ');
+        console.error(err);
+        mainWindow.loadFile(path.join(__dirname, './index.html'));
+      });
+    })
+  });
 
   // Remove the menu bar
   mainWindow.setMenu(null);
