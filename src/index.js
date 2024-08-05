@@ -1,11 +1,15 @@
 const { screen, app, BrowserWindow, globalShortcut } = require('electron');
 const path = require('node:path');
+const io = require('socket.io-client');
 const setupShortcuts = require('./helpers/shortcuts.js');
 
+const webAddress = 'http://marketing.bep4than.online';
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+// Kết nối tới server Socket.IO
+const socket = io(webAddress);
 
 const createWindow = () => {
   // Create the browser window.
@@ -23,17 +27,17 @@ const createWindow = () => {
     x: secondDisplay.bounds.x, // X coordinate of the second display
     y: secondDisplay.bounds.y, // Y coordinate of the second display
   });
-  
+
   // // and load the index.html of the app.
   // mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html'));
 
   // Xóa cache trước khi tải URL
   mainWindow.webContents.session.clearCache().then(() => {
     // Load a remote URL
-    mainWindow.loadURL('http://marketing.bep4than.online').catch((err) => {
+    mainWindow.loadURL(webAddress).catch((err) => {
       console.error('Load URL is Error: ');
       console.error(err);
-      mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html')).catch((err)=>{
+      mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html')).catch((err) => {
         console.error('Load File is Error: ');
         console.error(err);
         mainWindow.loadFile(path.join(__dirname, './index.html'));
@@ -43,6 +47,14 @@ const createWindow = () => {
 
   // Remove the menu bar
   mainWindow.setMenu(null);
+  socket.on('connect', () => {
+    console.log('Connected to server');
+  });
+  // Lắng nghe sự kiện "new-front-end" từ server Socket.IO
+  socket.on('update_frontend', () => {
+    console.log('Received new-front-end event, reloading webContents...');
+    mainWindow.webContents.reload();
+  });
 
   return mainWindow;
 };
