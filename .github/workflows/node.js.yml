@@ -28,9 +28,15 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build:linux
-    - run: echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S systemctl stop marketing4than.service
-    - run: echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S rm -rf ~/Desktop/Marketing4than-linux-x64
+    - run: |
+        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash -c '
+        systemctl stop marketing4than.service
+        rm -rf ~/Desktop/Marketing4than-linux-x64
+        '
     - run: cp -r out/Marketing4than-linux-x64 ~/Desktop/Marketing4than-linux-x64
     - run: chmod +x ~/Desktop/Marketing4than-linux-x64/Marketing4than
-    - name: Restart service
-      run: echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S systemctl restart marketing4than.service
+    - run: |
+        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash -c '
+        systemctl restart marketing4than.service
+        systemctl enable marketing4than.service
+        '
