@@ -30,3 +30,4 @@ jobs:
     - run: npm run build:linux
     - run: cp -r out/Marketing4than-linux-x64 ~/Desktop/Marketing4than-linux-x64
     - run: chmod +x ~/Desktop/Marketing4than-linux-x64/Marketing4than
+    - run: sudo systemctl restart marketing4than.service
