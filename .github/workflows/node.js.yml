@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -27,6 +27,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: electronjs run build:linux
+    - run: npm run build:linux
     - run: cp -r out/Marketing4than-linux-x64 ~/Desktop/Marketing4than-linux-x64
     - run: chmod +x ~/Desktop/Marketing4than-linux-x64/Marketing4than
