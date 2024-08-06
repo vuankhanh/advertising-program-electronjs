@@ -23,7 +23,7 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
-    fullscreen: false,
+    fullscreen: true,
     x: secondDisplay.bounds.x, // X coordinate of the second display
     y: secondDisplay.bounds.y, // Y coordinate of the second display
   });
