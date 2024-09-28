@@ -10,7 +10,7 @@ on:
 jobs:
   build:
 
-    runs-on: self-hosted
+    runs-on: [self-hosted, Linux, X64, staging]
 
     strategy:
       matrix:
@@ -31,9 +31,9 @@ jobs:
     - name: 'Build project'
       run: npm run build:linux
 
-    - name: 'Deploy to production'
+    - name: 'Deploy to staging'
       run: |
-        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S bash -c '
+        echo "${{ secrets.STAGING_SUDO_PASSWORD }}" | sudo -S bash -c '
         systemctl stop marketing4than.service
         rm -rf ~/Desktop/Marketing4than-linux-x64
         '
@@ -46,7 +46,7 @@ jobs:
 
     - name: 'Restart and enable service'
       run: |
-        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S bash -c '
+        echo "${{ secrets.STAGING_SUDO_PASSWORD }}" | sudo -S bash -c '
         systemctl restart marketing4than.service
         systemctl enable marketing4than.service
         '
