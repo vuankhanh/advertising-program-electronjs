@@ -33,10 +33,8 @@ jobs:
 
     - name: 'Deploy to production'
       run: |
-        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S bash -c '
-        systemctl stop marketing4than.service
-        rm -rf ~/Desktop/Marketing4than-linux-x64
-        '
+        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S systemctl stop marketing4than.service
+        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S rm -rf ~/Desktop/Marketing4than-linux-x64
   
     # - name: 'Copy files to Desktop'
     #   run: cp -r out/Marketing4than-linux-x64 ~/Desktop/Marketing4than-linux-x64
