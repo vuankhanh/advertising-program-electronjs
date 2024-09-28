@@ -33,8 +33,8 @@ jobs:
 
     - name: 'Deploy to production'
       run: |
-        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S systemctl stop marketing4than.service
-        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S rm -rf ~/Desktop/Marketing4than-linux-x64
+        echo "${{ secrets.VAK_TP550LA_SUDO_PASSWORD }}" | sudo -S systemctl stop marketing4than.service
+        echo "${{ secrets.VAK_TP550LA_SUDO_PASSWORD }}" | sudo -S rm -rf ~/Desktop/Marketing4than-linux-x64
   
     - name: 'Copy files to Desktop'
       run: cp -r out/Marketing4than-linux-x64 ~/Desktop
@@ -44,7 +44,7 @@ jobs:
 
     - name: 'Restart and enable service'
       run: |
-        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S bash -c '
+        echo "${{ secrets.VAK_TP550LA_SUDO_PASSWORD }}" | sudo -S bash -c '
         systemctl restart marketing4than.service
         systemctl enable marketing4than.service
         '

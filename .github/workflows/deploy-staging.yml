@@ -33,20 +33,18 @@ jobs:
 
     - name: 'Deploy to staging'
       run: |
-        echo "${{ secrets.STAGING_SUDO_PASSWORD }}" | sudo -S bash -c '
-        systemctl stop marketing4than.service
-        rm -rf ~/Desktop/Marketing4than-linux-x64
-        '
+        echo "${{ secrets.HOME_X502CA_SUDO_PASSWORD }}" | sudo -S systemctl stop marketing4than.service
+        echo "${{ secrets.HOME_X502CA_SUDO_PASSWORD }}" | sudo -S rm -rf ~/Desktop/Marketing4than-linux-x64
   
     - name: 'Copy files to Desktop'
-      run: cp -r out/Marketing4than-linux-x64 ~/Desktop/Marketing4than-linux-x64
+      run: cp -r out/Marketing4than-linux-x64 ~/Desktop
     
     - name: 'Change permissions'
       run: chmod +x ~/Desktop/Marketing4than-linux-x64/Marketing4than
 
     - name: 'Restart and enable service'
       run: |
-        echo "${{ secrets.STAGING_SUDO_PASSWORD }}" | sudo -S bash -c '
+        echo "${{ secrets.HOME_X502CA_SUDO_PASSWORD }}" | sudo -S bash -c '
         systemctl restart marketing4than.service
         systemctl enable marketing4than.service
         '
