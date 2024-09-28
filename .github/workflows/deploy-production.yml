@@ -6,8 +6,6 @@ name: Node.js CI
 on:
   push:
     branches: [ "production" ]
-  pull_request:
-    branches: [ "production" ]
 
 jobs:
   build:
@@ -21,22 +19,34 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    
     - run: npm ci
-    - run: npm run build:linux
-    - run: |
-        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash -c '
+
+    - name: 'Build project'
+      run: npm run build:linux
+
+    - name: 'Deploy to production'
+      run: |
+        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S bash -c '
         systemctl stop marketing4than.service
         rm -rf ~/Desktop/Marketing4than-linux-x64
         '
-    - run: cp -r out/Marketing4than-linux-x64 ~/Desktop/Marketing4than-linux-x64
-    - run: chmod +x ~/Desktop/Marketing4than-linux-x64/Marketing4than
-    - run: |
-        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash -c '
+  
+    - name: 'Copy files to Desktop'
+      run: cp -r out/Marketing4than-linux-x64 ~/Desktop/Marketing4than-linux-x64
+    
+    - name: 'Change permissions'
+      run: chmod +x ~/Desktop/Marketing4than-linux-x64/Marketing4than
+
+    - name: 'Restart and enable service'
+      run: |
+        echo "${{ secrets.PRODUCTION_SUDO_PASSWORD }}" | sudo -S bash -c '
         systemctl restart marketing4than.service
         systemctl enable marketing4than.service
         '
