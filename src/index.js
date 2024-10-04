@@ -1,6 +1,8 @@
 const { screen, app, BrowserWindow, globalShortcut } = require('electron');
 const path = require('node:path');
 const io = require('socket.io-client');
+const { exec } = require('child_process');
+const os = require('os');
 const setupShortcuts = require('./helpers/shortcuts.js');
 
 const webAddress = 'http://marketing.bep4than.online';
@@ -50,10 +52,29 @@ const createWindow = () => {
   socket.on('connect', () => {
     console.log('Connected to server');
   });
+
   // Lắng nghe sự kiện "new-front-end" từ server Socket.IO
   socket.on('update_frontend', () => {
     console.log('Received new-front-end event, reloading webContents...');
     mainWindow.webContents.reload();
+  });
+
+  // Lắng nghe sự kiện "reload_marketing4than.service" từ server Socket.IO
+  socket.on('reload_marketing4than.service', () => {
+    console.log('Received reload_marketing4than.service event, reloading marketing4than.service...');
+    if (os.platform() === 'linux') {
+      exec('systemctl reload marketing4than.service', (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error reloading service: ${error.message}`);
+          return;
+        }
+        if (stderr) {
+          console.error(`stderr: ${stderr}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+      });
+    }
   });
 
   return mainWindow;
