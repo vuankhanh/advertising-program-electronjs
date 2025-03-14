@@ -3,9 +3,11 @@ const path = require('node:path');
 const io = require('socket.io-client');
 const { exec } = require('child_process');
 const os = require('os');
+const setupSocketServer = require('./server');
 const setupShortcuts = require('./helpers/shortcuts.js');
 
-const webAddress = 'http://marketing.bep4than.online';
+// const webAddress = 'http://marketing.bep4than.online';
+const webAddress = 'http://localhost:4200';
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -19,11 +21,13 @@ const createWindow = () => {
   const secondDisplay = displays[1] || displays[0];
 
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 900,
     icon: path.join(__dirname, './assets/icons/png/512x512.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      enableRemoteModule: false
     },
     fullscreen: true,
     x: secondDisplay.bounds.x, // X coordinate of the second display
@@ -36,7 +40,12 @@ const createWindow = () => {
   // Xóa cache trước khi tải URL
   mainWindow.webContents.session.clearCache().then(() => {
     // Load a remote URL
-    mainWindow.loadURL(webAddress).catch((err) => {
+    mainWindow.loadURL(webAddress).then(_=>{
+      // Gửi tin nhắn từ Electron đến Angular sau 5 giây
+      setTimeout(() => {
+        mainWindow.webContents.send('electron-to-angular', 'Xin chào từ Electron!');
+      }, 5000);
+    }).catch((err) => {
       console.error('Load URL is Error: ');
       console.error(err);
       mainWindow.loadFile(path.join(__dirname, '../dist/digital-signage-angular/browser/index.html')).catch((err) => {
@@ -85,6 +94,12 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   const mainWindow = createWindow();
+
+  // // Open the DevTools.
+  // mainWindow.webContents.openDevTools();
+
+  // Setup the Socket.IO server
+  setupSocketServer(mainWindow);
 
   // Register global shortcuts
   setupShortcuts(mainWindow);
