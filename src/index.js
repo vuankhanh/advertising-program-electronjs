@@ -4,10 +4,10 @@ const io = require('socket.io-client');
 const { exec } = require('child_process');
 const os = require('os');
 const setupSocketServer = require('./server');
+const setupScreenChange = require('./screen-change');
 const setupShortcuts = require('./helpers/shortcuts.js');
 
-// const webAddress = 'http://marketing.bep4than.online';
-const webAddress = 'http://localhost:4200';
+const webAddress = 'http://marketing.bep4than.online';
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -103,6 +103,9 @@ app.whenReady().then(() => {
 
   // Register global shortcuts
   setupShortcuts(mainWindow);
+
+  // Setup screen change listeners
+  setupScreenChange(screen, mainWindow);
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
