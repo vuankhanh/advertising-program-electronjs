@@ -1,9 +1,16 @@
 const express = require('express');
 const http = require('http');
+const cors = require('cors');
 const { Server } = require('socket.io');
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 const io = new Server(server);
 
 const PORT = process.env.PORT || 3100;
@@ -13,24 +20,6 @@ server.listen(PORT, () => {
 });
 
 module.exports = (mainWindow) => {
-  // const payments = [
-  //   { amount: 24000 },
-  //   { amount: 104000 },
-  //   { amount: 96000 },
-  //   { amount: 5000 }
-  // ];
-
-  // setTimeout(() => {
-  //   for (const payment of payments) {
-  //     mainWindow.webContents.send('transaction-success', payment);
-  //   }
-  // }, 5000);
-  
-
-  // setTimeout(() => {
-  //   mainWindow.webContents.send('transaction-success', { amount: 50000});
-  // }, 40000);
-
   io.on('connection', (socket) => {
     console.log('A user connected');
   
@@ -38,6 +27,11 @@ module.exports = (mainWindow) => {
       console.log('User disconnected');
     });
   
+    socket.on('ping', (timestamp) => {
+      console.log(`Received ping ${timestamp}`);
+      socket.emit('pong', timestamp);
+    })
+
     // Example event listener
     socket.on('the-new-payment', (data) => {
       mainWindow.webContents.send('transaction-success', data);
