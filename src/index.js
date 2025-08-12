@@ -7,7 +7,7 @@ const setupSocketServer = require('./server');
 const setupScreenChange = require('./screen-change');
 const setupShortcuts = require('./helpers/shortcuts.js');
 
-const webAddress = 'http://marketing.bep4than.online';
+const webAddress = 'http://marketing.bep4than.vn';
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
