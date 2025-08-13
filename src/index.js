@@ -16,10 +16,6 @@ if (require('electron-squirrel-startup')) {
 const socket = io(webAddress);
 
 const createWindow = () => {
-  // Create the browser window.
-  const displays = screen.getAllDisplays();
-  const secondDisplay = displays[1] || displays[0];
-
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
@@ -28,10 +24,7 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       enableRemoteModule: false
-    },
-    fullscreen: true,
-    x: secondDisplay.bounds.x, // X coordinate of the second display
-    y: secondDisplay.bounds.y, // Y coordinate of the second display
+    }
   });
 
   // // and load the index.html of the app.
@@ -94,6 +87,19 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   const mainWindow = createWindow();
+
+    // Create the browser window.
+  const displays = screen.getAllDisplays();
+  const secondDisplay = displays[1] || displays[0];
+
+  mainWindow.setBounds({
+    x: secondDisplay.bounds.x,
+    y: secondDisplay.bounds.y,
+    width: secondDisplay.bounds.width,
+    height: secondDisplay.bounds.height
+  });
+
+  mainWindow.setFullScreen(true);
 
   // // Open the DevTools.
   // mainWindow.webContents.openDevTools();
