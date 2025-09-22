@@ -91,15 +91,14 @@ app.whenReady().then(() => {
     // Create the browser window.
   const displays = screen.getAllDisplays();
   const secondDisplay = displays[1] || displays[0];
-
-  mainWindow.setBounds({
-    x: secondDisplay.bounds.x,
-    y: secondDisplay.bounds.y,
-    width: secondDisplay.bounds.width,
-    height: secondDisplay.bounds.height
-  });
   
   setTimeout(() => {
+    mainWindow.setBounds({
+      x: secondDisplay.bounds.x,
+      y: secondDisplay.bounds.y,
+      width: secondDisplay.bounds.width,
+      height: secondDisplay.bounds.height
+    });
     mainWindow.setFullScreen(true);
   }, 150);
 
