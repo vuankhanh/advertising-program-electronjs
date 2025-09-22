@@ -98,8 +98,10 @@ app.whenReady().then(() => {
     width: secondDisplay.bounds.width,
     height: secondDisplay.bounds.height
   });
-
-  mainWindow.setFullScreen(true);
+  
+  setTimeout(() => {
+    mainWindow.setFullScreen(true);
+  }, 150);
 
   // // Open the DevTools.
   // mainWindow.webContents.openDevTools();

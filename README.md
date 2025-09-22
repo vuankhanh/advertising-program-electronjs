@@ -4,34 +4,37 @@
 
 Để đảm bảo rằng dịch vụ Marketing4than được cài đặt và cấu hình để tự động khởi động sau khi môi trường đồ họa đã sẵn sàng, hãy thực hiện các bước sau:
 
-**1. Mở File Cấu Hình Dịch Vụ:**
+Sử dụng script với vòng lặp
 
-*Mở terminal và nhập lệnh sau để chỉnh sửa file cấu hình dịch vụ của Marketing4than*
+Cách này sẽ tạo một script đơn giản để chạy ứng dụng của bạn trong một vòng lặp vô hạn, đảm bảo rằng nó sẽ tự động khởi động lại ngay lập tức sau khi bị đóng.
 
+**1. Tạo file script:**
+
+*Mở terminal và nhập lệnh sau để tạo một file kịch bản mới, ví dụ: restart_app.sh*
   ```bash
-  sudo nano /etc/systemd/system/marketing4than.service
+  sudo nano ~/bin/bash/restart_app.sh
   ```
-**2. Thêm Nội Dung Vào File Cấu Hình:** 
+*Nếu chưa có đường dẫn ~/bin/bash thì hãy tạo thêm thư mục*
+
+**2. Thêm Nội Dung Vào File kịch bản:** 
   ```
-  [Unit]
-  Description=My Marketing4than Service
-  After=multi-user.target systemd-sysusers.service
-  Requires=systemd-sysusers.service
+  #!/bin/bash
 
-  [Service]
-  ExecStart=/home/your_username/Desktop/Marketing4than-linux-x64/Marketing4than
-  Restart=always
-  User=your_username
-  Environment=DISPLAY=:0
-  Environment=XAUTHORITY=/home/your_username/.Xauthority
+  # Thay thế đường dẫn và tên ứng dụng của bạn ở đây
+  APP_PATH="/home/vuankhanh/Desktop/advertising-program-electronjs/out/Marketing4than-linux-x64/Marketing4than"
 
-  [Install]
-  WantedBy=multi-user.target
+  while true; do
+    $APP_PATH
+  done
   ```
-  *Đảm bảo thay thế your_username bằng tên người dùng thực tế của bạn.*
 
-**3. Kích Hoạt Và Khởi Động Dịch Vụ:**
+**3. Cấp quyền truy cập vào file script 
+
+**4. Kích Hoạt Và Khởi Động Dịch Vụ:**
+
+  *Mở Startup Applications trong Ubuntu và thêm*
   ```bash
-  sudo systemctl daemon-reload
-  sudo systemctl enable marketing4than.service
+    Name: Marketing Service
+    # Thay thế đường dẫn và file kịch bản
+    Command: /home/vuankhanh/bin/bash/restart_app.sh
   ```
