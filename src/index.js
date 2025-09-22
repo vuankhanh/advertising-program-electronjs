@@ -88,19 +88,12 @@ const createWindow = () => {
 app.whenReady().then(() => {
   const mainWindow = createWindow();
 
-    // Create the browser window.
   const displays = screen.getAllDisplays();
   const secondDisplay = displays[1] || displays[0];
-  
-  setTimeout(() => {
-    mainWindow.setBounds({
-      x: secondDisplay.bounds.x,
-      y: secondDisplay.bounds.y,
-      width: secondDisplay.bounds.width,
-      height: secondDisplay.bounds.height
-    });
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.setPosition(secondDisplay.bounds.x, secondDisplay.bounds.y)
     mainWindow.setFullScreen(true);
-  }, 150);
+  });
 
   // // Open the DevTools.
   // mainWindow.webContents.openDevTools();
